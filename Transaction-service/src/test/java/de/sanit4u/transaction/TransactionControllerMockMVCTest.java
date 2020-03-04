@@ -9,8 +9,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,6 +31,7 @@ import de.sanit4u.transaction.model.Transaction;
 @SpringBootTest
 @AutoConfigureMockMvc
 public class TransactionControllerMockMVCTest extends AbstractTransactionTest {
+	protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	private MockMvc mvc;
@@ -34,8 +39,16 @@ public class TransactionControllerMockMVCTest extends AbstractTransactionTest {
 	@Autowired
 	private ObjectMapper objectMapper;
 
+	@Before
+	public void before() {
+
+		log.debug("--------------------------------");
+	}
+
 	@Test
 	public void testRecordTransactionWithMockMVC() throws Exception {
+
+		log.debug("Test execution : testRecordTransactionWithMockMVC ");
 		Transaction transaction = this.getDummyTransactionWithOutParent();
 		long id = transaction.getId();
 
@@ -54,6 +67,8 @@ public class TransactionControllerMockMVCTest extends AbstractTransactionTest {
 
 	@Test
 	public void testRecordTransactionWithMockMVC_BAD_Request() throws Exception {
+		log.debug("Test execution : testRecordTransactionWithMockMVC_BAD_Request ");
+
 		Transaction transaction = this.getDummyTransactionWithOutParent();
 		long id = transaction.getId();
 		transaction.setType(null);
@@ -70,6 +85,8 @@ public class TransactionControllerMockMVCTest extends AbstractTransactionTest {
 
 	@Test
 	public void testRetrieveTransactionByIDWithMockMVC() throws Exception {
+		log.debug("Test execution : testRetrieveTransactionByIDWithMockMVC ");
+
 		Transaction transaction = this.getDummyTransactionWithOutParent();
 		long id = transaction.getId();
 
@@ -99,6 +116,7 @@ public class TransactionControllerMockMVCTest extends AbstractTransactionTest {
 
 	@Test
 	public void testRetrieveTransactionByIDWithMockMVC_NOT_FOUND() throws Exception {
+		log.debug("Test execution : testRetrieveTransactionByIDWithMockMVC_NOT_FOUND ");
 		Transaction transaction = this.getDummyTransactionWithOutParent();
 		long id = transaction.getId();
 
@@ -111,6 +129,8 @@ public class TransactionControllerMockMVCTest extends AbstractTransactionTest {
 
 	@Test
 	public void testRetrieveTransactionByTypeWithMockMVC() throws Exception {
+		log.debug("Test execution : testRetrieveTransactionByTypeWithMockMVC ");
+
 		Transaction transaction = this.getDummyTransactionWithOutParent();
 		Long id = transaction.getId();
 		String type = transaction.getType();
@@ -129,6 +149,8 @@ public class TransactionControllerMockMVCTest extends AbstractTransactionTest {
 
 	@Test
 	public void testRetrieveSumOfAllChildrenTransactionWithMockMVC() throws Exception {
+		log.debug("Test execution : testRetrieveSumOfAllChildrenTransactionWithMockMVC ");
+
 		Transaction parent = this.getDummyTransactionWithOutParent();
 		Long id = parent.getId();
 		testSave(parent, id);
@@ -164,4 +186,9 @@ public class TransactionControllerMockMVCTest extends AbstractTransactionTest {
 		//@formatter:on
 	}
 
+	@After
+	public void tearDown() {
+
+		log.debug("--------------------------------");
+	}
 }

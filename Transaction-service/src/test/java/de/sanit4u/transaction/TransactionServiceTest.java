@@ -9,9 +9,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -34,6 +38,7 @@ import de.sanit4u.transaction.service.impl.TransactionServiceImpl;
  */
 @RunWith(SpringRunner.class)
 public class TransactionServiceTest extends AbstractTransactionTest {
+	protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@TestConfiguration
 	static class TransactionServiceImplTestContextConfiguration {
@@ -51,8 +56,15 @@ public class TransactionServiceTest extends AbstractTransactionTest {
 	@MockBean
 	private ITransactionRepo<Transaction> transactionRepo;
 
+	@Before
+	public void before() {
+
+		log.debug("--------------------------------");
+	}
+	
 	@Test
 	public void testRecordTransaction_SUCCESS() {
+		log.debug("Test execution : testRecordTransaction_SUCCESS ");
 
 		Transaction transaction = this.getDummyTransactionWithOutParent();
 
@@ -65,6 +77,8 @@ public class TransactionServiceTest extends AbstractTransactionTest {
 
 	@Test(expected = TransactionException.class)
 	public void testRecordTransaction_EXCEPTION() {
+		log.debug("Test execution : testRecordTransaction_EXCEPTION ");
+
 		Transaction transaction = this.getDummyTransactionWithOutParent();
 
 		Mockito.when(transactionRepo.save(transaction)).thenReturn(null);
@@ -74,6 +88,7 @@ public class TransactionServiceTest extends AbstractTransactionTest {
 
 	@Test
 	public void testRetrieveTransactionById() {
+		log.debug("Test execution : testRetrieveTransactionById ");
 
 		Transaction expectedTransaction = this.getDummyTransactionWithOutParent();
 
@@ -91,6 +106,8 @@ public class TransactionServiceTest extends AbstractTransactionTest {
 
 	@Test(expected = TransactionNotFoundException.class)
 	public void testRetrieveTransactionById_EXCEPTION() {
+		log.debug("Test execution : testRetrieveTransactionById_EXCEPTION ");
+
 		Transaction transaction = this.getDummyTransactionWithOutParent();
 
 		Mockito.when(transactionRepo.findById(transaction.getId())).thenReturn(Optional.empty());
@@ -100,6 +117,7 @@ public class TransactionServiceTest extends AbstractTransactionTest {
 
 	@Test
 	public void testRetrieveTransactionByType() {
+		log.debug("Test execution : testRetrieveTransactionByType ");
 
 		Transaction expectedTransaction = this.getDummyTransactionWithOutParent();
 		List<Transaction> expectedResult = Arrays.asList(expectedTransaction);
@@ -116,6 +134,7 @@ public class TransactionServiceTest extends AbstractTransactionTest {
 
 	@Test
 	public void testSumTransactionOfParentId() {
+		log.debug("Test execution : testSumTransactionOfParentId ");
 
 		Transaction parentTransaction = this.getDummyTransactionWithOutParent();
 		Transaction childTransaction_level_1_A = this.getDummyTransactionWithParent(parentTransaction.getId());
@@ -141,5 +160,12 @@ public class TransactionServiceTest extends AbstractTransactionTest {
 		assertTrue(actualResult.getSum() == expectedResult);
 
 	}
+	
+	@After
+	public void tearDown() {
+
+		log.debug("--------------------------------");
+	}
+
 
 }

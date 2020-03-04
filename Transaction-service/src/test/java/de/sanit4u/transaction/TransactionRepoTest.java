@@ -8,8 +8,11 @@ import java.util.List;
 import java.util.Optional;
 
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -20,12 +23,14 @@ import de.sanit4u.transaction.repo.ITransactionRepo;
 import de.sanit4u.transaction.repo.impl.TransactionRepoImpl;
 
 /**
- * Mock test cases for testing the service only
+ * test cases for testing the Repository only
  * 
  *
  */
 @RunWith(SpringRunner.class)
 public class TransactionRepoTest extends AbstractTransactionTest {
+
+	protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@TestConfiguration
 	static class TransactionRepoTestContextConfiguration {
@@ -39,9 +44,15 @@ public class TransactionRepoTest extends AbstractTransactionTest {
 	@Autowired
 	private ITransactionRepo<Transaction> transactionRepo;
 
+	@Before
+	public void before() {
+
+		log.debug("--------------------------------");
+	}
+
 	@Test
 	public void testSaveTransaction() {
-
+		log.debug("Test execution : testSaveTransaction ");
 		Transaction transaction = this.getDummyTransactionWithOutParent();
 
 		testSave(transaction);
@@ -49,7 +60,7 @@ public class TransactionRepoTest extends AbstractTransactionTest {
 
 	@Test
 	public void testRetrieveTransactionById() {
-
+		log.debug("Test execution : testRetrieveTransactionById ");
 		Transaction expectedTransaction = this.getDummyTransactionWithOutParent();
 
 		testSave(expectedTransaction);
@@ -61,7 +72,7 @@ public class TransactionRepoTest extends AbstractTransactionTest {
 
 	@Test
 	public void testRetrieveTransactionByType() {
-
+		log.debug("Test execution : testRetrieveTransactionByType ");
 		Transaction expectedTransaction = this.getDummyTransactionWithOutParent();
 
 		testSave(expectedTransaction);
@@ -75,7 +86,7 @@ public class TransactionRepoTest extends AbstractTransactionTest {
 
 	@Test
 	public void testSumTransactionOfParentId() {
-
+		log.debug("Test execution : testSumTransactionOfParentId ");
 		Transaction parentTransaction = this.getDummyTransactionWithOutParent();
 		testSave(parentTransaction);
 
@@ -102,7 +113,7 @@ public class TransactionRepoTest extends AbstractTransactionTest {
 
 	@Test
 	public void testSumTransactionOfParentId_After_Update_same_Transaction() {
-
+		log.debug("Test execution : testSumTransactionOfParentId_After_Update_same_Transaction ");
 		Transaction parentTransaction = this.getDummyTransactionWithOutParent();
 		testSave(parentTransaction);
 
@@ -156,6 +167,8 @@ public class TransactionRepoTest extends AbstractTransactionTest {
 	public void tearDown() {
 
 		transactionRepo.clearAll();
+
+		log.debug("--------------------------------");
 	}
 
 	private void testSave(Transaction transaction) {
