@@ -1,6 +1,3 @@
-#Solution
-
-I have selected the Technical Assignment no 3 named as Transaction Service.
 
 ## 1. Program Structure
 -  Program structure is standard structure consists of  </br>
