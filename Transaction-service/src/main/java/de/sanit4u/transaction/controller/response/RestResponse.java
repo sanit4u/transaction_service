@@ -1,5 +1,7 @@
 package de.sanit4u.transaction.controller.response;
 
+import org.springframework.http.HttpStatus;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -8,16 +10,16 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
  *
  */
 public class RestResponse {
-	private String status;
+	protected final HttpStatus status;
 
 	@JsonInclude(Include.NON_NULL)
-	private String message;
+	protected String message;
 
-	public RestResponse(String status) {
+	public RestResponse(HttpStatus status) {
 		this.status = status;
 	}
 
-	public RestResponse(String status, String message) {
+	public RestResponse(HttpStatus status, String message) {
 		this.status = status;
 		this.message = message;
 	}
@@ -25,7 +27,7 @@ public class RestResponse {
 	/**
 	 * @return the status
 	 */
-	public String getStatus() {
+	public HttpStatus getStatus() {
 		return status;
 	}
 

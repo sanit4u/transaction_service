@@ -14,4 +14,12 @@ public class TransactionNotFoundException extends RuntimeException {
 		super(message);
 		this.transactionId = transactionId;
 	}
+
+	/**
+	 * @return the transactionId
+	 */
+	public long getTransactionId() {
+		return transactionId;
+	}
+
 }

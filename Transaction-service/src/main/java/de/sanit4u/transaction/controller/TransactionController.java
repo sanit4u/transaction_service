@@ -3,6 +3,9 @@ package de.sanit4u.transaction.controller;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +41,7 @@ public class TransactionController {
 	private TransactionService transactionService;
 
 	/**
-	 * Initial Binder for binding the object validators
+	 * Initial Binder for binding the object validator
 	 * 
 	 * @param binder
 	 */
@@ -49,7 +52,7 @@ public class TransactionController {
 
 	@ApiOperation(value = "Records transaction")
 	@PutMapping(path = "/transaction/{transactionId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> recordTransaction(@PathVariable long transactionId,
+	public ResponseEntity<?> recordTransaction(@PathVariable @NotBlank @Min(1) long transactionId,
 			@Valid @RequestBody Transaction transaction) {
 
 		log.debug(String.format("recording Transaction for %d ", transactionId));
@@ -58,13 +61,13 @@ public class TransactionController {
 
 		transactionService.recordTransaction(transaction);
 
-		return ResponseEntity.ok().body(new RestResponse(HttpStatus.OK.name()));
+		return ResponseEntity.ok().body(new RestResponse(HttpStatus.OK));
 
 	}
 
 	@ApiOperation(value = "Retrieve transaction by Transaction Id")
 	@GetMapping(path = "/transaction/{transactionId}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> findTransactionById(@PathVariable("transactionId") long transactionId) {
+	public ResponseEntity<?> findTransactionById(@PathVariable("transactionId") @NotBlank @Min(1) long transactionId) {
 		log.debug(String.format("retrieving Transaction for %d ", transactionId));
 
 		Transaction transaction = transactionService.retrieveTransaction(transactionId);
@@ -75,7 +78,7 @@ public class TransactionController {
 
 	@ApiOperation(value = "Retrieve all transactions by the type")
 	@GetMapping(path = "/types/{type}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> findTransactionByType(@PathVariable String type) {
+	public ResponseEntity<?> findTransactionByType(@PathVariable @NotBlank @Size(min = 1) String type) {
 		log.debug(String.format("retrieving all transactions for %s ", type));
 
 		List<Long> transactionIds = transactionService.retrieveTransactionByType(type);
@@ -85,7 +88,7 @@ public class TransactionController {
 
 	@ApiOperation(value = "Returns sum of all transactions transitively linked by parentId")
 	@GetMapping(path = "/sum/{transactionId}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> sumChildTransactionsById(@PathVariable long transactionId) {
+	public ResponseEntity<?> sumChildTransactionsById(@PathVariable @NotBlank @Min(1) long transactionId) {
 		log.debug(String.format("retrieving all transactions for %d ", transactionId));
 
 		SumDTO sumDTO = transactionService.sumTransaction(transactionId);

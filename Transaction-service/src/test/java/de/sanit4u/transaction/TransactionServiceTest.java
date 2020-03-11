@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import de.sanit4u.transaction.dto.SumDTO;
-import de.sanit4u.transaction.exception.TransactionException;
+import de.sanit4u.transaction.exception.TransactionServiceException;
 import de.sanit4u.transaction.exception.TransactionNotFoundException;
 import de.sanit4u.transaction.model.Transaction;
 import de.sanit4u.transaction.repo.ITransactionRepo;
@@ -75,7 +75,7 @@ public class TransactionServiceTest extends AbstractTransactionTest {
 		assertTrue(isSuccess);
 	}
 
-	@Test(expected = TransactionException.class)
+	@Test(expected = TransactionServiceException.class)
 	public void testRecordTransaction_EXCEPTION() {
 		log.debug("Test execution : testRecordTransaction_EXCEPTION ");
 

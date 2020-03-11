@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import de.sanit4u.transaction.dto.SumDTO;
-import de.sanit4u.transaction.exception.TransactionException;
+import de.sanit4u.transaction.exception.TransactionServiceException;
 import de.sanit4u.transaction.exception.TransactionNotFoundException;
 import de.sanit4u.transaction.model.Transaction;
 import de.sanit4u.transaction.repo.ITransactionRepo;
@@ -38,7 +38,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 		Transaction savedTransaction = transactionRepo.save(transaction);
 		if (savedTransaction == null) {
-			throw new TransactionException("Exception while recording the transaction");
+			throw new TransactionServiceException("Exception while recording the transaction");
 		}
 
 		log.debug(String.format("recorded Transaction for %d ", transaction.getId()));

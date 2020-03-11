@@ -91,7 +91,8 @@ public class TransactionRepoImpl implements ITransactionRepo<Transaction> {
 	public List<Transaction> findByType(String type) {
 		log.debug(String.format("retrieving Transaction by type %s ", type));
 
-		return new ArrayList<Transaction>(TYPES_TRANSACTION_SECONDARY_MAP.get(type));
+		return new ArrayList<Transaction>(
+				TYPES_TRANSACTION_SECONDARY_MAP.getOrDefault(type, new HashSet<Transaction>()));
 	}
 
 	/**
